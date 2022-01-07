@@ -1,13 +1,12 @@
 #include <algorithm>
 #include <list>
 #include <map>
-#include <string>
 
-class LRUCache {
+template <class KeyType, class ValueType> class LRUCache {
 public:
   LRUCache(std::size_t capacity) : capacity(capacity) {}
 
-  void put(const std::string &key, const std::string &value) {
+  void put(const KeyType &key, const ValueType &value) {
     const auto search = data.find(key);
 
     // known key, remove from recentlyUsed
@@ -25,11 +24,11 @@ public:
     }
   }
 
-  std::string get(const std::string &key) {
+  std::optional<ValueType> get(const KeyType &key) {
     const auto search = data.find(key);
     if (search == data.end()) {
-      // key not found, return empty string
-      return "";
+      // key not found - return nothing
+      return std::nullopt;
     }
 
     auto start = std::remove(recentlyUsed.begin(), recentlyUsed.end(), key);
@@ -42,6 +41,6 @@ public:
 
 private:
   std::size_t capacity;
-  std::map<std::string, std::string> data;
-  std::list<std::string> recentlyUsed;
+  std::map<KeyType, ValueType> data;
+  std::list<KeyType> recentlyUsed;
 };
