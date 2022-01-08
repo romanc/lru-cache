@@ -3,6 +3,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace lrucache;
 
 int main() {
   LRUCache<string, string> cache(3);
@@ -22,11 +23,30 @@ int main() {
   cout << "put(D)" << endl;
   cache.put("D", "delta");
 
-  cout << "cache[A]: " << cache.get("A").value_or("not found") << endl;
-  cout << "cache[A]: " << cache.get("A").value_or("not found") << endl;
-  cout << "cache[B]: " << cache.get("B").value_or("not found") << endl;
-  cout << "cache[C]: " << cache.get("C").value_or("not found") << endl;
-  cout << "cache[C]: " << cache.get("C").value_or("not found") << endl;
+  cout << "cache[A]: "
+       << (cache.get("A").has_value() ? cache.get("A").value().get()
+                                      : "not found")
+       << endl;
+  cout << "cache[A]: "
+       << (cache.get("A").has_value() ? cache.get("A").value().get()
+                                      : "not found")
+       << endl;
+  cout << "cache[B]: "
+       << (cache.get("B").has_value() ? cache.get("B").value().get()
+                                      : "not found")
+       << endl;
+  cout << "cache[C]: "
+       << (cache.get("C").has_value() ? cache.get("C").value().get()
+                                      : "not found")
+       << endl;
+  cout << "cache[C]: "
+       << (cache.get("C").has_value() ? cache.get("C").value().get()
+                                      : "not found")
+       << endl;
+  cout << "cache[D]: "
+       << (cache.get("D").has_value() ? cache.get("D").value().get()
+                                      : "not found")
+       << endl;
 
   return 0;
 }
