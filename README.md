@@ -15,7 +15,7 @@ using namespace std;
 using namespace lrucache;
 
 int main() {
-  // LRU cache with capacity 2
+  // LRUCache<KeyType, ValueType> with capacity 2
   LRUCache<string, string> cache{2};
 
   cache.emplace("A", "alpha"); // A -> alpha
@@ -37,17 +37,17 @@ int main() {
 }
 ```
 
-In contrast to `put()`, `emplace()` forwards construtor arguments of the `ValueType`, see [move example](examples/move-test.cpp).
+With `emplace()`, in contrast to `put()`, constructor arguments of the `ValueType` are perfectly forwarded, avoidng move or copy operations, see [move example](examples/move-test.cpp).
 
 The return value of `get(key)` is an optional (see [optional type](https://en.cppreference.com/w/cpp/utility/optional) (C++17)) reference to the key's associated value in the cache. Optional references are not part of the C++17 standard (see [why](https://www.fluentcpp.com/2018/10/05/pros-cons-optional-references/)). This library decided against using raw pointers and used `std::optional<std:reference_wrapper<const ValueType>>` instead. Sadly, the reference wrapper breaks `optional<T>::value_or(default_value)` which leads to the current syntax.
 
-#### Using it in your project
+#### Using `LRUCache` in your project
 
 `LRUCache` is header-only, so teh simplest usage is to copy `src/LRUCache.h` directly into your project tree. See [examples/](examples/) folder for more usage samples.
 
-**Warning** It is not advised to use this library in production code. This code is provided as-is. Use at your own risk, see [LICENSE].
+**Warning** It is not advised to use this library in production code. This code is provided as-is. Use at your own risk, see [LICENSE](LICENSE).
 
-## Building samples and test
+## Tests and samples
 
 If you want to run tests and samples, start  by cloning this repository. Initializing the submodule is optional and only necessary if you want to build the tests.
 
