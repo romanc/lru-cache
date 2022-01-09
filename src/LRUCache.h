@@ -12,7 +12,7 @@ template <class KeyType, class ValueType> class LRUCache {
 public:
   LRUCache(std::size_t capacity) : capacity(capacity) {}
 
-  void put(const KeyType &key, const ValueType &value) {
+  template <class U> void put(const KeyType &key, U &&value) {
     const auto search = data.find(key);
 
     // case: known key
@@ -22,7 +22,7 @@ public:
       recentlyUsed.splice(recentlyUsed.end(), recentlyUsed, pos);
 
       // update the value
-      data[key] = value;
+      data.insert_or_assign(key, std::forward<U>(value));
       return;
     }
 
@@ -35,7 +35,7 @@ public:
 
     // store new element
     recentlyUsed.push_back(key);
-    data[key] = value;
+    data.emplace(key, std::forward<U>(value));
   }
 
   std::optional<std::reference_wrapper<const ValueType>>
