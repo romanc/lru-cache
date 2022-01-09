@@ -1,10 +1,3 @@
-cmake_minimum_required(VERSION 3.17)
-
-project(LRUCache LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 add_subdirectory(Catch2)
-add_executable(tests usage.cpp memory.cpp catchMain.cpp)
-target_link_libraries(tests Catch2::Catch2)
+add_executable(runner usage.cpp memory.cpp catchMain.cpp)
+target_link_libraries(runner Catch2::Catch2)
