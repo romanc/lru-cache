@@ -56,23 +56,6 @@ public:
     return std::cref(search->second);
   }
 
-  std::optional<std::reference_wrapper<ValueType>> get(const ValueType &key) {
-    const auto search = data.find(key);
-
-    // case: key not found
-    if (search == data.end()) {
-      // return nothing
-      return std::nullopt;
-    }
-
-    // move key in recently used to the end
-    auto pos = std::find(recentlyUsed.begin(), recentlyUsed.end(), key);
-    recentlyUsed.splice(recentlyUsed.end(), recentlyUsed, pos);
-
-    // return the value associated with this key
-    return std::ref(search->second);
-  }
-
 private:
   const std::size_t capacity;
   std::unordered_map<KeyType, ValueType> data;
