@@ -5,95 +5,69 @@
 using namespace std;
 using namespace lrucache;
 
-TEST_CASE("Default constructed cache", "[lrucache]") {
-  LRUCache<int, double> cache{3};
-
-  REQUIRE(cache.size() == 0);
-  REQUIRE(cache.isEmpty());
-  REQUIRE(cache.isFull() == false);
-
-  REQUIRE(cache.get(42).has_value() == false);
-}
-
-TEST_CASE("Put adds element", "[lrucache]") {
-  LRUCache<string, string> cache{2};
-  REQUIRE(cache.size() == 0);
-
-  cache.put("A", "alpha");
-  REQUIRE(cache.size() == 1);
-}
-
-TEST_CASE("Emplace adds element", "[lrucache]") {
-  LRUCache<string, string> cache{2};
-  REQUIRE(cache.size() == 0);
-
-  cache.emplace("A", "alpha");
-  REQUIRE(cache.size() == 1);
-}
-
-TEST_CASE("Put with same key overrides value", "[lrucache]") {
-  LRUCache<string, string> cache{2};
-
-  cache.put("A", "alpha");
-  REQUIRE(cache.size() == 1);
-
-  cache.put("A", "alpha2");
-  REQUIRE(cache.size() == 1);
-  REQUIRE(cache.get("A")->get() == "alpha2");
-}
-
-TEST_CASE("Emplace with same key overrides value", "[lrucache]") {
-  LRUCache<string, string> cache{2};
-
-  cache.emplace("A", "alpha");
-  REQUIRE(cache.size() == 1);
-
-  cache.emplace("A", "alpha2");
-  REQUIRE(cache.size() == 1);
-  REQUIRE(cache.get("A")->get() == "alpha2");
-}
-
-TEST_CASE("Last recently inserted is evicted from cache", "[lrucache]") {
+TEST_CASE("Usage tests", "[lrucache]") {
   LRUCache<string, string> cache{3};
 
-  cache.put("A", "alpha"); // A -> alpha
-  REQUIRE(cache.size() == 1);
+  SECTION("Default constructed cache") {
+    REQUIRE(cache.size() == 0);
+    REQUIRE(cache.isEmpty());
+    REQUIRE(cache.isFull() == false);
+    REQUIRE(cache.get("42").has_value() == false);
+  }
 
-  cache.put("B", "beta"); // B -> beta, A -> alpha
-  REQUIRE(cache.size() == 2);
+  SECTION("Put adds element", "[lrucache]") {
+    cache.put("A", "alpha");
+    REQUIRE(cache.size() == 1);
+    REQUIRE(cache.isFull() == false);
+    REQUIRE(cache.isEmpty() == false);
+  }
 
-  cache.put("C", "gamma"); // C -> gamma, B -> beta, A -> alpha
-  REQUIRE(cache.size() == 3);
-  REQUIRE(cache.isFull());
+  SECTION("Emplace adds element") {
+    cache.emplace("A", "alpha");
+    REQUIRE(cache.size() == 1);
+  }
 
-  cache.put("D", "delta"); // D -> delta, C -> gamma, B -> beta
-  REQUIRE(cache.size() == 3);
-  REQUIRE(cache.isFull());
+  SECTION("Put with same key overrides value") {
+    cache.put("A", "alpha");
+    cache.put("A", "alpha2");
+    REQUIRE(cache.size() == 1);
+    REQUIRE(cache.get("A")->get() == "alpha2");
+  }
 
-  REQUIRE(cache.get("A").has_value() == false);
-}
+  SECTION("Emplace with same key overrides value") {
+    cache.emplace("A", "alpha");
+    cache.emplace("A", "alpha2");
+    REQUIRE(cache.size() == 1);
+    REQUIRE(cache.get("A")->get() == "alpha2");
+  }
 
-TEST_CASE("Reading counts as using", "[lrucache]") {
-  LRUCache<string, string> cache{3};
+  SECTION("Last recently inserted is evicted from cache") {
+    cache.emplace("A", "alpha"); // A -> alpha
+    cache.emplace("B", "beta");  // B -> beta, A -> alpha
+    REQUIRE(cache.size() == 2);
 
-  cache.put("A", "alpha"); // A -> alpha
-  REQUIRE(cache.size() == 1);
+    cache.emplace("C", "gamma"); // C -> gamma, B -> beta, A -> alpha
+    REQUIRE(cache.size() == 3);
+    REQUIRE(cache.isFull());
 
-  cache.put("B", "beta"); // B -> beta, A -> alpha
-  REQUIRE(cache.size() == 2);
+    cache.emplace("D", "delta"); // D -> delta, C -> gamma, B -> beta
+    REQUIRE(cache.size() == 3);
+    REQUIRE(cache.isFull());
 
-  cache.get("A");          // A -> alpha, B -> beta
-  cache.put("C", "gamma"); // C -> gamma, A -> alpha, B -> beta
-  REQUIRE(cache.size() == 3);
-  REQUIRE(cache.isFull());
+    REQUIRE(cache.get("A").has_value() == false);
+  }
 
-  cache.get("A");          // A -> alpha, C -> gamma, B -> beta
-  cache.put("D", "delta"); // D -> delta, A -> alpha, C -> gamma
-  REQUIRE(cache.size() == 3);
-  REQUIRE(cache.isFull());
+  SECTION("Reading counts as using") {
+    cache.emplace("A", "alpha"); // A -> alpha
+    cache.emplace("B", "beta");  // B -> beta, A -> alpha
+    cache.get("A");              // A -> alpha, B -> beta
+    cache.emplace("C", "gamma"); // C -> gamma, A -> alpha, B -> beta
+    cache.get("A");              // A -> alpha, C -> gamma, B -> beta
+    cache.emplace("D", "delta"); // D -> delta, A -> alpha, C -> gamma
 
-  REQUIRE(cache.get("A")->get() == "alpha");
-  // A -> alpha, D -> delta, C -> gamma
-  REQUIRE(cache.get("B").has_value() == false);
-  // A -> alpha, D -> delta, C -> gamma
+    REQUIRE(cache.get("A")->get() == "alpha");
+    // A -> alpha, D -> delta, C -> gamma
+    REQUIRE(cache.get("B").has_value() == false);
+    // A -> alpha, D -> delta, C -> gamma
+  }
 }

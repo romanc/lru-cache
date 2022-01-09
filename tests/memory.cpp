@@ -76,38 +76,38 @@ private:
   size_t moveAssignCallCount = 0;
 };
 
-TEST_CASE("Emplace call only constructor", "[lrucache]") {
+TEST_CASE("Memory management", "[lrucache]") {
   LRUCache<int, Moveable> cache{2};
 
-  cache.emplace(1, 1);
-  const auto &cacheElement = cache.get(1)->get();
+  SECTION("Emplace call only constructor") {
+    cache.emplace(1, 1);
+    const auto &cacheElement = cache.get(1)->get();
 
-  // Moveable(1) needs to be constructed once
-  REQUIRE(cacheElement.constructorCalls() == 1);
+    // Moveable(1) needs to be constructed once
+    REQUIRE(cacheElement.constructorCalls() == 1);
 
-  // Ensure constructed element is neither moved ...
-  REQUIRE(cacheElement.moveConstructorCalls() == 0);
-  REQUIRE(cacheElement.copyConstructorCalls() == 0);
+    // Ensure constructed element is neither moved ...
+    REQUIRE(cacheElement.moveConstructorCalls() == 0);
+    REQUIRE(cacheElement.copyConstructorCalls() == 0);
 
-  // .. nor copied
-  REQUIRE(cacheElement.moveAssignments() == 0);
-  REQUIRE(cacheElement.copyAssignments() == 0);
-}
+    // .. nor copied
+    REQUIRE(cacheElement.moveAssignments() == 0);
+    REQUIRE(cacheElement.copyAssignments() == 0);
+  }
 
-TEST_CASE("Put moves moveable types", "[lrucache]") {
-  LRUCache<int, Moveable> cache{2};
+  SECTION("Put moves moveable types") {
+    cache.put(1, 1);
+    const auto &cacheElement = cache.get(1)->get();
 
-  cache.put(1, 1);
-  const auto &cacheElement = cache.get(1)->get();
+    // Moveable needs to be constructed somewhere
+    REQUIRE(cacheElement.constructorCalls() == 1);
 
-  // Moveable needs to be constructed somewhere
-  REQUIRE(cacheElement.constructorCalls() == 1);
+    // Ensure constructed element is moved ...
+    REQUIRE((cacheElement.moveConstructorCalls() == 1 ||
+             cacheElement.moveAssignments() == 1));
 
-  // Ensure constructed element is moved ...
-  REQUIRE((cacheElement.moveConstructorCalls() == 1 ||
-           cacheElement.moveAssignments() == 1));
-
-  // ... and not copied
-  REQUIRE(cacheElement.copyConstructorCalls() == 0);
-  REQUIRE(cacheElement.copyAssignments() == 0);
+    // ... and not copied
+    REQUIRE(cacheElement.copyConstructorCalls() == 0);
+    REQUIRE(cacheElement.copyAssignments() == 0);
+  }
 }
