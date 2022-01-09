@@ -53,8 +53,7 @@ public:
     recentlyUsed.splice(recentlyUsed.end(), recentlyUsed, pos);
 
     // return the value associated with this key
-    return std::optional<std::reference_wrapper<const ValueType>>{
-        search->second};
+    return std::cref(search->second);
   }
 
   std::optional<std::reference_wrapper<ValueType>> get(const ValueType &key) {
@@ -71,7 +70,7 @@ public:
     recentlyUsed.splice(recentlyUsed.end(), recentlyUsed, pos);
 
     // return the value associated with this key
-    return std::optional<std::reference_wrapper<ValueType>>{search->second};
+    return std::ref(search->second);
   }
 
 private:

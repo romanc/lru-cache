@@ -23,30 +23,20 @@ int main() {
   cout << "put(D)" << endl;
   cache.put("D", "delta");
 
+  const string default_value = "not found";
+
   cout << "cache[A]: "
-       << (cache.get("A").has_value() ? cache.get("A").value().get()
-                                      : "not found")
-       << endl;
+       << (cache.get("A") ? cache.get("A")->get() : default_value) << endl;
   cout << "cache[A]: "
-       << (cache.get("A").has_value() ? cache.get("A").value().get()
-                                      : "not found")
-       << endl;
+       << (cache.get("A") ? cache.get("A")->get() : default_value) << endl;
   cout << "cache[B]: "
-       << (cache.get("B").has_value() ? cache.get("B").value().get()
-                                      : "not found")
-       << endl;
+       << (cache.get("B") ? cache.get("B")->get() : default_value) << endl;
   cout << "cache[C]: "
-       << (cache.get("C").has_value() ? cache.get("C").value().get()
-                                      : "not found")
-       << endl;
+       << (cache.get("C") ? cache.get("C")->get() : default_value) << endl;
   cout << "cache[C]: "
-       << (cache.get("C").has_value() ? cache.get("C").value().get()
-                                      : "not found")
-       << endl;
+       << (cache.get("C") ? cache.get("C")->get() : default_value) << endl;
   cout << "cache[D]: "
-       << (cache.get("D").has_value() ? cache.get("D").value().get()
-                                      : "not found")
-       << endl;
+       << (cache.get("D") ? cache.get("D")->get() : default_value) << endl;
 
   return 0;
 }
