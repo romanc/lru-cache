@@ -6,22 +6,22 @@ using namespace std;
 using namespace lrucache;
 
 int main() {
-  LRUCache<string, string> cache(3);
+  LRUCache<string, string> cache{3};
 
   cout << "put(A)" << endl;
-  cache.put("A", "alpha");
+  cache.emplace("A", "alpha");
 
   cout << "put(B)" << endl;
-  cache.put("B", "beta");
+  cache.emplace("B", "beta");
 
   cout << "put(B)" << endl;
-  cache.put("B", "beta");
+  cache.emplace("B", "beta");
 
   cout << "put(C)" << endl;
-  cache.put("C", "gamma");
+  cache.emplace("C", "gamma");
 
   cout << "put(D)" << endl;
-  cache.put("D", "delta");
+  cache.emplace("D", "delta");
 
   const string default_value = "not found";
 
