@@ -77,10 +77,10 @@ int main() {
   // move contructor (Moveable:1)
   // destructor (Moveable:-1)
   //
-  // cache.put(2, 2)
+  // cache.emplace(2, 2)
   // constructor(Moveable:2)
   //
-  // cache.put(3, 3)
+  // cache.emplace(3, 3)
   // destructor (Moveable:1)
   // constructor(Moveable:3)
   //
@@ -91,10 +91,10 @@ int main() {
   // copy contructor (NonMoveable:1)
   // destructor (NonMoveable:1)
   //
-  // cache.put(2, 2)
+  // cache.emplace(2, 2)
   // constructor(NonMoveable:2)
   //
-  // cache.put(3, 3)
+  // cache.emplace(3, 3)
   // destructor (NonMoveable:1)
   // constructor(NonMoveable:3)
   //
@@ -113,11 +113,11 @@ int main() {
 
   // emplace(2, 2) will forward the constructor argument and construct Movable
   // in-place inside the cache.
-  cout << "cache.put(2, 2)" << endl;
+  cout << "cache.emplace(2, 2)" << endl;
   cache.emplace(2, 2);
   cout << endl;
 
-  cout << "cache.put(3, 3)" << endl;
+  cout << "cache.emplace(3, 3)" << endl;
   cache.emplace(3, 3);
   cout << endl;
 
@@ -131,11 +131,11 @@ int main() {
 
   // emplace(2, 2) will forward the constructor argument and construct Movable
   // in-place inside the cache.
-  cout << "cache.put(2, 2)" << endl;
+  cout << "cache.emplace(2, 2)" << endl;
   otherCache.emplace(2, 2);
   cout << endl;
 
-  cout << "cache.put(3, 3)" << endl;
+  cout << "cache.emplace(3, 3)" << endl;
   otherCache.emplace(3, 3);
   cout << endl;
 
