@@ -4,10 +4,10 @@ Generic, header-only implementation of a last recently used ([LRU](https://en.wi
 
 ## Usage
 
-`LRUCache` has no default constructor and needs to be initialized with a maximal capcity. The cache offers `put(key, value)` / `emplace(key, value)` to insert and `get(key)` to retrieve values. Furthermore, `size()` (number of elements currently in cache), `isEmpty()` and `isFull()` are provided.
+`LRUCache` has no default constructor and needs to be initialized with a maximal capacity. The cache offers `put(key, value)` / `emplace(key, value)` to insert and `get(key)` to retrieve values. Furthermore, `size()` (number of elements currently in cache), `isEmpty()` and `isFull()` are provided.
 
 ```c++
-#include<LRUCache.h>
+#include "LRUCache.h"
 
 #include <iostream>
 
@@ -51,9 +51,9 @@ The return value of `get(key)` is an optional (see [optional type](https://en.cp
 
 **Warning** It is not advised to use this library in production code. This code is provided as-is. Use at your own risk, see [LICENSE](LICENSE).
 
-## Tests and samples
+## Tests and examples
 
-If you want to run tests and samples, start  by cloning this repository. Initializing the submodule is optional and only necessary if you want to build the tests.
+If you want to run [tests](tests/) and/or [examples](examples), start  by cloning this repository. Initializing the submodule is optional and only necessary if you want to build the tests.
 
 ```bash
 git clone --recurse-submodule git@github.com:romanc/lru-cache.git
@@ -70,7 +70,7 @@ cmake -build .
 ctest
 ```
 
-**Note** By default, tests will be built, but examples won't. Configure `CMake` with `cmake -G Ninja -DLRUCACHE_BUILD_EXAMPLES=ON ..` to build the examples:
+**Note** By default, tests will be built, but examples won't. Configure `CMake` with `cmake -G Ninja -DLRUCACHE_BUILD_EXAMPLES=ON ..` to also build the examples:
 
 ```bash
 cd lru-cache/
