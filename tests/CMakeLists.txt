@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(Catch2)
-add_executable(tests usage.cpp catchMain.cpp)
+add_executable(tests usage.cpp memory.cpp catchMain.cpp)
 target_link_libraries(tests Catch2::Catch2)
